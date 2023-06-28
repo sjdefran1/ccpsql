@@ -1,5 +1,7 @@
 import requests
 
+from json import dumps
+
 req_headers = {
     "Accept": "*/*",
     "Accept-Language": "en-US,en;q=0.9",
@@ -24,32 +26,54 @@ def get_player_common_info(player_id: int):
 
         attrs_labels = result["resultSets"][0]["headers"]
         attrs_values = result["resultSets"][0]["rowSet"][0]
+        stats_values = result["resultSets"][1]["rowSet"][0]
 
         attr_remaps = {
             "PERSON_ID": "pid",
             "FIRST_NAME": "fname",
             "LAST_NAME": "lname",
+            "DISPLAY_FI_LAST": "nameabbr",
             "SEASON_EXP": "yrsplayed",
             "JERSEY": "jerseynum",
             "POSITION": "pos",
             "ROSTERSTATUS": "status",
             "TEAM_ID": "tid",
             "GREATEST_75_FLAG": "goatflag",
+            "COUNTRY": "country",
+            "HEIGHT": "height",
+            "WEIGHT": "weight",
         }
         ret_dict = {}
+        # Common attributes (name, id, jersey etc)
         for i, header in enumerate(attrs_labels):
             try:
                 remap_val = attr_remaps[header]
                 ret_dict[remap_val] = attrs_values[i]
             except:  # header not included in remap, move on
                 pass
+
+        # Stats
+        stats_dict = {
+            "statstr": stats_values[2],
+            "PTS": stats_values[3],
+            "AST": stats_values[4],
+            "REB": stats_values[5],
+        }
+        # sorry future me, auto formatter horrible choice
+        ret_dict[
+            "avatarurl"
+        ] = f"https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/{player_id}.png"
+
+        ret_dict = {**ret_dict, **stats_dict}
+
         return ret_dict
-    except:
+    except Exception as e:
+        print(e)
         print(f"{player_id} Failed")
         return None
 
 
 if __name__ == "__main__":
-    # d = get_player_common_info(2544)
-    # print(d)
-    print("boopit ")
+    d = get_player_common_info(1717)
+    print(d)
+    # print("boopit ")

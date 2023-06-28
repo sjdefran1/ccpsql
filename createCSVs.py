@@ -63,7 +63,8 @@ def create_matchupV2():
 def create_teams_dataframe():
     teams = get_teams_dict()
     teams_df = pd.DataFrame(data=teams)
-    teams_df.set_index("id", inplace=True)
+    teams_df = teams_df.rename(columns={"id": "tid"})
+    teams_df.set_index("tid", inplace=True)
     teams_df.to_csv(os.path.join(CSV_DIR_NAME, CSV_FILE_NAMES["teams"]))
 
 
@@ -80,8 +81,8 @@ def create_plays_dataframe():
 if __name__ == "__main__":
     # create_all_players_list()
     # create_matchup_and_stats_dataframes()
-    create_matchupV2()
+    # create_matchupV2()
     # create_teams_dataframe()
-    # create_plays_dataframe()
+    create_plays_dataframe()
     # d = parse_all_players_txt()
     # print(d)
