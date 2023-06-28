@@ -9,6 +9,8 @@ from time import sleep
 import pandas as pd
 import os
 
+from activeIDS import IDS
+
 CSV_FILE_NAMES = {
     "players": "Players.csv",
     "matchups": "MatchupsV2.csv",
@@ -21,7 +23,8 @@ CSV_DIR_NAME = "csvdata"
 
 def create_all_players_list():
     """Creates dict for every player that has a play on the site"""
-    all_ids = get_all_active_player_ids_on_site()
+    # all_ids = get_all_active_player_ids_on_site()
+    all_ids = IDS
     all_players = []
     for i, id in enumerate(all_ids):
         player = get_player_common_info(id)

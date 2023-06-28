@@ -29,18 +29,11 @@ def get_player_common_info(player_id: int):
             "PERSON_ID": "pid",
             "FIRST_NAME": "fname",
             "LAST_NAME": "lname",
-            "BIRTHDATE": "bday",
-            "SCHOOL": "school",
-            "HEIGHT": "height",
-            "WEIGHT": "weight",
             "SEASON_EXP": "yrsplayed",
             "JERSEY": "jerseynum",
             "POSITION": "pos",
             "ROSTERSTATUS": "status",
             "TEAM_ID": "tid",
-            "TEAM_NAME": "tname",
-            "TEAM_CITY": "tcity",
-            "FROM_YEAR": "firstyr",
             "GREATEST_75_FLAG": "goatflag",
         }
         ret_dict = {}
@@ -57,5 +50,6 @@ def get_player_common_info(player_id: int):
 
 
 if __name__ == "__main__":
-    d = get_player_common_info(2544)
-    print(d)
+    # d = get_player_common_info(2544)
+    # print(d)
+    print("boopit ")
