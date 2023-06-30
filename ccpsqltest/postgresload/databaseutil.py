@@ -97,17 +97,17 @@ def get_matchups_and_matchup_stats_dicts() -> list:
             continue  # skip rest of iteration, will add broken games later
         else:
             num_quarters = pbp_game["number_quarters"]
-        cur_matchup = {
-            "gid": matchup["game_id"],
-            "sznstr": matchup["season_str"],
-            "date": matchup["date"],
-            "htid": matchup["home_info"]["TEAM_ID"],
-            "atid": matchup["away_info"]["TEAM_ID"],
-            "nquarters": num_quarters,
-            "matchupstr": matchup["away_info"]["MATCHUP"],  # BOS @ PHI
-            "HPTS": matchup["home_info"]["PTS"],
-            "APTS": matchup["away_info"]["PTS"],
-        }
+        # cur_matchup = {
+        #     "gid": matchup["game_id"],
+        #     "sznstr": matchup["season_str"],
+        #     "date": matchup["date"],
+        #     "htid": matchup["home_info"]["TEAM_ID"],
+        #     "atid": matchup["away_info"]["TEAM_ID"],
+        #     "nquarters": num_quarters,
+        #     "matchupstr": matchup["away_info"]["MATCHUP"],  # BOS @ PHI
+        #     "HPTS": matchup["home_info"]["PTS"],
+        #     "APTS": matchup["away_info"]["PTS"],
+        # }
 
         # cur_matchup = {
         #     'gid':    matchup['game_id'],
@@ -117,49 +117,50 @@ def get_matchups_and_matchup_stats_dicts() -> list:
         #     'atid':   matchup['away_info']['TEAM_ID']
         # }
 
-        # curr_matchup_stats_data = {
-        #     'gid':          matchup['game_id'],
-        #     'nquarters':    num_quarters,
-        #     'matchupstr':   matchup['away_info']['MATCHUP'], # BOS @ PHI
-        #     'HWL':          matchup['home_info']['WL'],
-        #     'HFGM':         matchup['home_info']['FGM'],
-        #     'HFGA':         matchup['home_info']['FGA'],
-        #     'HFG_PCT':      matchup['home_info']['FG_PCT'],
-        #     'HFG3M':        matchup['home_info']['FG3M'],
-        #     'HFG3A':        matchup['home_info']['FG3A'],
-        #     'HFG3_PCT':     matchup['home_info']['FG3_PCT'],
-        #     'HFTM':         matchup['home_info']['FTM'],
-        #     'HFTA':         matchup['home_info']['FTA'],
-        #     'HFT_PCT':      matchup['home_info']['FT_PCT'],
-        #     'HOREB':        matchup['home_info']['OREB'],
-        #     'HDREB':        matchup['home_info']['DREB'],
-        #     'HREB':         matchup['home_info']['REB'],
-        #     'HAST':         matchup['home_info']['AST'],
-        #     'HSTL':         matchup['home_info']['STL'],
-        #     'HBLK':         matchup['home_info']['BLK'],
-        #     'HTOV':         matchup['home_info']['TOV'],
-        #     'HPF':          matchup['home_info']['PF'],
-        #     'HPTS':         matchup['home_info']['PTS'],
-        #     'AWL':          matchup['away_info']['WL'],
-        #     'AFGM':         matchup['away_info']['FGM'],
-        #     'AFGA':         matchup['away_info']['FGA'],
-        #     'AFG_PCT':      matchup['away_info']['FG_PCT'],
-        #     'AFG3M':        matchup['away_info']['FG3M'],
-        #     'AFG3A':        matchup['away_info']['FG3A'],
-        #     'AFG3_PCT':     matchup['away_info']['FG3_PCT'],
-        #     'AFTM':         matchup['away_info']['FTM'],
-        #     'AFTA':         matchup['away_info']['FTA'],
-        #     'AFT_PCT':      matchup['away_info']['FT_PCT'],
-        #     'AOREB':        matchup['away_info']['OREB'],
-        #     'ADREB':        matchup['away_info']['DREB'],
-        #     'AREB':         matchup['away_info']['REB'],
-        #     'AAST':         matchup['away_info']['AST'],
-        #     'ASTL':         matchup['away_info']['STL'],
-        #     'ABLK':         matchup['away_info']['BLK'],
-        #     'ATOV':         matchup['away_info']['TOV'],
-        #     'APF':          matchup['away_info']['PF'],
-        #     'APTS':         matchup['away_info']['PTS'],
-        # }
+        cur_matchup = {
+            "gid": matchup["game_id"],
+            "nquarters": num_quarters,
+            "matchupstr": matchup["away_info"]["MATCHUP"],  # BOS @ PHI
+            "date": matchup["date"],
+            "HWL": matchup["home_info"]["WL"],
+            "HFGM": matchup["home_info"]["FGM"],
+            "HFGA": matchup["home_info"]["FGA"],
+            "HFG_PCT": matchup["home_info"]["FG_PCT"],
+            "HFG3M": matchup["home_info"]["FG3M"],
+            "HFG3A": matchup["home_info"]["FG3A"],
+            "HFG3_PCT": matchup["home_info"]["FG3_PCT"],
+            "HFTM": matchup["home_info"]["FTM"],
+            "HFTA": matchup["home_info"]["FTA"],
+            "HFT_PCT": matchup["home_info"]["FT_PCT"],
+            "HOREB": matchup["home_info"]["OREB"],
+            "HDREB": matchup["home_info"]["DREB"],
+            "HREB": matchup["home_info"]["REB"],
+            "HAST": matchup["home_info"]["AST"],
+            "HSTL": matchup["home_info"]["STL"],
+            "HBLK": matchup["home_info"]["BLK"],
+            "HTOV": matchup["home_info"]["TOV"],
+            "HPF": matchup["home_info"]["PF"],
+            "HPTS": matchup["home_info"]["PTS"],
+            "AWL": matchup["away_info"]["WL"],
+            "AFGM": matchup["away_info"]["FGM"],
+            "AFGA": matchup["away_info"]["FGA"],
+            "AFG_PCT": matchup["away_info"]["FG_PCT"],
+            "AFG3M": matchup["away_info"]["FG3M"],
+            "AFG3A": matchup["away_info"]["FG3A"],
+            "AFG3_PCT": matchup["away_info"]["FG3_PCT"],
+            "AFTM": matchup["away_info"]["FTM"],
+            "AFTA": matchup["away_info"]["FTA"],
+            "AFT_PCT": matchup["away_info"]["FT_PCT"],
+            "AOREB": matchup["away_info"]["OREB"],
+            "ADREB": matchup["away_info"]["DREB"],
+            "AREB": matchup["away_info"]["REB"],
+            "AAST": matchup["away_info"]["AST"],
+            "ASTL": matchup["away_info"]["STL"],
+            "ABLK": matchup["away_info"]["BLK"],
+            "ATOV": matchup["away_info"]["TOV"],
+            "APF": matchup["away_info"]["PF"],
+            "APTS": matchup["away_info"]["PTS"],
+        }
 
         # Add dict to overall list to be converted to df later
         matchup_data.append(cur_matchup)
@@ -195,12 +196,12 @@ def create_plays_list():
                     "pid": play["playerID"],
                     "gid": game_id,
                     "description": play["description"],
-                    "type": pt,  # 'FGM' etc
+                    "ptype": pt,  # 'FGM' etc
                     "url": play["url"],
                     "tid": play["teamID"],
                     "hscore": play["scoreHome"],
                     "ascore": play["scoreAway"],
-                    "time": play["time"],
+                    "ptime": play["time"],
                     "quarter": play["quarter"],
                 }
                 final_plays_list.append(transformed_play)

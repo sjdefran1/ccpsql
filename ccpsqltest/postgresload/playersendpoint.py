@@ -43,14 +43,19 @@ def get_player_common_info(player_id: int):
             "HEIGHT": "height",
             "WEIGHT": "weight",
         }
-        ret_dict = {}
+        attr_dict = {}
         # Common attributes (name, id, jersey etc)
         for i, header in enumerate(attrs_labels):
             try:
                 remap_val = attr_remaps[header]
-                ret_dict[remap_val] = attrs_values[i]
+                attr_dict[remap_val] = attrs_values[i]
             except:  # header not included in remap, move on
                 pass
+
+        # add headshot from nba
+        attr_dict[
+            "avatarurl"
+        ] = f"https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/{player_id}.png"
 
         # Stats
         stats_dict = {
@@ -59,13 +64,9 @@ def get_player_common_info(player_id: int):
             "AST": stats_values[4],
             "REB": stats_values[5],
         }
-        # sorry future me, auto formatter horrible choice
-        ret_dict[
-            "avatarurl"
-        ] = f"https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/{player_id}.png"
 
-        ret_dict = {**ret_dict, **stats_dict}
-
+        # unpack dict's to create ret
+        ret_dict = {**attr_dict, **stats_dict}
         return ret_dict
     except Exception as e:
         print(e)

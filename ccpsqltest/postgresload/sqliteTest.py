@@ -9,6 +9,9 @@ from dotenv import load_dotenv
 load_dotenv()
 TABLES_TO_CSV_FILE_NAMES = {
     "plays": "Plays.csv",
+    "matchups": "MatchupsV5.csv",
+    "teams": "Teams.csv",
+    "players": "Players.csv",
 }
 CSV_DIR_NAME = "csvdata"
 # connection = sqlite3.connect('test.db')

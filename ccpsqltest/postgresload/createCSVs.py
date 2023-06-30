@@ -13,15 +13,15 @@ from activeIDS import IDS
 
 CSV_FILE_NAMES = {
     "players": "Players.csv",
-    "matchups": "MatchupsV2.csv",
+    "matchups": "MatchupsV4.csv",
     "matchup_stats": "MatchupStats.csv",
     "teams": "Teams.csv",
-    "plays": "Plays.csv",
+    "plays": "PlaysV3.csv",
 }
 CSV_DIR_NAME = "csvdata"
 
 
-def create_all_players_list():
+def create_players_dataframe():
     """Creates dict for every player that has a play on the site"""
     # all_ids = get_all_active_player_ids_on_site()
     all_ids = IDS
@@ -79,7 +79,7 @@ def create_plays_dataframe():
 
 
 if __name__ == "__main__":
-    # create_all_players_list()
+    # create_players_dataframe()
     # create_matchup_and_stats_dataframes()
     # create_matchupV2()
     # create_teams_dataframe()

@@ -16,10 +16,10 @@ from table_schemas import SCHEMAS, PANDAS_SCHEMA
 
 load_dotenv()
 TABLES_TO_CSV_FILE_NAMES = {
-    "matchups": "MatchupsV3.csv",
-    "players": "Players.csv",
-    "teams": "Teams.csv",
-    "plays": "Plays.csv",
+    # "matchups": "MatchupsV5.csv",
+    # "players": "Players.csv",
+    # "teams": "Teams.csv",
+    "plays": "PlaysV3.csv",
 }
 CSV_DIR_NAME = "csvdata"
 # connection = sqlite3.connect('test.db')
@@ -27,11 +27,13 @@ CSV_DIR_NAME = "csvdata"
 # pg_url = os.getenv("POSTGRESURL")
 # conn_dict = psycopg.conninfo.conninfo_to_dict(pg_url)
 # connection = psycopg.connect(**conn_dict)
-pg_url = os.getenv("POSTGRESNEON")
-sa_connection = sa.create_engine(pg_url)
+
 # sqliteConnection = sqlite3.connect("test.db")
 
 # sa_lite_engine = sa.create_engine("sqlite:///school.db")
+
+pg_url = os.getenv("POSTGRESNEON")
+sa_connection = sa.create_engine(pg_url)
 
 
 def create_tables():
