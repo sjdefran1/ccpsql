@@ -5,6 +5,8 @@ import psycopg2
 import sqlalchemy as sa
 import pandas as pd
 from dotenv import load_dotenv
+
+load_dotenv()
 from time import perf_counter
 
 
@@ -21,11 +23,11 @@ async def startup():
     global psy_cursor
     # sa_engine = sa.create_engine(PG_URL)
     psyconn = psycopg2.connect(
-        host="ep-shy-hall-554430.us-west-2.aws.neon.tech",
-        port="5432",
-        user="sjdefran",
-        database="neondb",
-        password="dbiu5gvrD3Hs",
+        host=os.getenv("NEONHOST"),
+        port=os.getenv("NEONPORT"),
+        user=os.getenv("USER"),
+        database=os.getenv("DATABASE"),
+        password=os.getenv("PASSWORD"),
     )
     psy_cursor = psyconn.cursor()
     print("\tFINISHED")
