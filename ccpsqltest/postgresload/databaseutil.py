@@ -88,7 +88,6 @@ def get_matchups_and_matchup_stats_dicts() -> list:
     mismatch_games_list_ids = []
 
     matchup_data = []
-    matchup_stats_data = []
     for i, matchup in enumerate(matchups):
         pbp_game = pbp_collection.find_one({"game_id": matchup["game_id"]})
         # no playbyplay game found, add to list to fix later
@@ -97,31 +96,17 @@ def get_matchups_and_matchup_stats_dicts() -> list:
             continue  # skip rest of iteration, will add broken games later
         else:
             num_quarters = pbp_game["number_quarters"]
-        # cur_matchup = {
-        #     "gid": matchup["game_id"],
-        #     "sznstr": matchup["season_str"],
-        #     "date": matchup["date"],
-        #     "htid": matchup["home_info"]["TEAM_ID"],
-        #     "atid": matchup["away_info"]["TEAM_ID"],
-        #     "nquarters": num_quarters,
-        #     "matchupstr": matchup["away_info"]["MATCHUP"],  # BOS @ PHI
-        #     "HPTS": matchup["home_info"]["PTS"],
-        #     "APTS": matchup["away_info"]["PTS"],
-        # }
-
-        # cur_matchup = {
-        #     'gid':    matchup['game_id'],
-        #     'sznstr': matchup['season_str'],
-        #     'date':   matchup['date'],
-        #     'htid':   matchup['home_info']['TEAM_ID'],
-        #     'atid':   matchup['away_info']['TEAM_ID']
-        # }
 
         cur_matchup = {
             "gid": matchup["game_id"],
             "nquarters": num_quarters,
             "matchupstr": matchup["away_info"]["MATCHUP"],  # BOS @ PHI
             "date": matchup["date"],
+            "gtype": matchup["playoff_flag"],
+            "sznstr": matchup["season_str"],
+            "views": matchup["views"],
+            "htid": matchup["home_info"]["TEAM_ID"],
+            "atid": matchup["away_info"]["TEAM_ID"],
             "HWL": matchup["home_info"]["WL"],
             "HFGM": matchup["home_info"]["FGM"],
             "HFGA": matchup["home_info"]["FGA"],
@@ -164,6 +149,7 @@ def get_matchups_and_matchup_stats_dicts() -> list:
 
         # Add dict to overall list to be converted to df later
         matchup_data.append(cur_matchup)
+
         # matchup_stats_data.append(curr_matchup_stats_data)
         print(
             f"Finished | {matchup['away_info']['MATCHUP']} | {matchup['date']} | {i+1} / 11498"

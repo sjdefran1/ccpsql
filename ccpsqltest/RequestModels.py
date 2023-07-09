@@ -10,3 +10,6 @@ class PlayOptions(BaseModel):
     quarter: Union[None, int]
     stat_type: Optional[str]
     gid: Optional[int]
+    gtype: Optional[int]
+    season: Optional[str]
+    home_away: Optional[str]

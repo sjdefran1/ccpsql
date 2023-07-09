@@ -2,7 +2,11 @@ import pandas as pd
 
 from table_schemas import SCHEMAS, PANDAS_SCHEMA
 
-df1 = pd.read_csv("csvdata//MatchupsV4.csv", dtype=PANDAS_SCHEMA["matchups"])
+"""
+Currently adds htid, and atid
+"""
+
+df1 = pd.read_csv("csvdata//MatchupsV6.csv", dtype=PANDAS_SCHEMA["matchups"])
 
 df2 = pd.read_csv("csvdata//MatchupsV3.csv", dtype=PANDAS_SCHEMA["matchups"])
 

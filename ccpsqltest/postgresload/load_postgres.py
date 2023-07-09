@@ -16,10 +16,10 @@ from table_schemas import SCHEMAS, PANDAS_SCHEMA
 
 load_dotenv()
 TABLES_TO_CSV_FILE_NAMES = {
-    # "matchups": "MatchupsV5.csv",
+    "matchups": "MatchupsV5.csv",
     # "players": "Players.csv",
     # "teams": "Teams.csv",
-    "plays": "PlaysV3.csv",
+    # "plays": "PlaysV3.csv",
 }
 CSV_DIR_NAME = "csvdata"
 # connection = sqlite3.connect('test.db')

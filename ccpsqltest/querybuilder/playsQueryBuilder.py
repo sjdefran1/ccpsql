@@ -1,4 +1,3 @@
-from pydantic import BaseModel
 from querybuilder.playSql import *  # sql queries
 from ccpsqltest.RequestModels import PlayOptions
 
@@ -12,30 +11,57 @@ def build_plays_query(opts: PlayOptions) -> str:
     # Games vs other teams || specific game
     # cant be both
     if opts.matchup_team_id:
-        add_str = MATHCUPS_OPT.format(opts.matchup_team_id, opts.matchup_team_id)
+        add_str = MATCHUPS_VERSUS_OPTIONS_SQL.format(
+            opts.matchup_team_id, opts.matchup_team_id
+        )
         ret_query = delimiter.join([ret_query, add_str])
     elif opts.gid:
-        add_str = GID_OPTS.format(opts.gid)
-        ret_query = delimiter.join([ret_query, add_str])
+        # join matchups w/out worying abt matchup id
+        ret_query = delimiter.join([ret_query, DEFAULT_MATCHUPS_JOIN])
 
-    # only plays from when player was on specific team
+        # get certain game
+        add_str = GID_OPTIONS_SQL.format(opts.gid)
+        ret_query = delimiter.join([ret_query, add_str])
+    else:
+        # take care of default join w/ matchups
+        ret_query = delimiter.join([ret_query, DEFAULT_MATCHUPS_JOIN])
+
+    # Start where clause for pid
+    ret_query = delimiter.join([ret_query, BASE_OPTIONS_SQL.format(opts.player_id)])
+
+    # Add Additional options
+    # 1) only plays from when player was on specific team
     if opts.team_id:
-        add_str = TEAMID_OPTS.format(opts.team_id)
+        add_str = TEAMID_OPTIONS_SQL.format(opts.team_id)
         ret_query = delimiter.join([ret_query, add_str])
 
-    # only by quarter
+    # 2) only by quarter
     if opts.quarter:
-        add_str = QUARTER_OPT.format(opts.quarter)
+        add_str = QUARTER_OPTIONS_SQL.format(opts.quarter)
         ret_query = delimiter.join([ret_query, add_str])
 
-    # only fgm etc
+    # 3) only fgm etc
     if opts.stat_type:
-        add_str = STAT_TYPE_OPTS.format(opts.stat_type)
+        add_str = STAT_TYPE_OPTIONS_SQL.format(opts.stat_type)
         ret_query = delimiter.join([ret_query, add_str])
 
-    # where pid=player_id && limit
-    ret_query = delimiter.join([ret_query, BASE_OPTS.format(opts.player_id)])
-    ret_query = delimiter.join([ret_query, LIMIT_OPTS.format(opts.limit)])
+    # 4) only playoff games or regular szn
+    if opts.gtype:
+        add_str = GTYPE_OPTIONS_SQL.format(opts.gtype)
+        ret_query = delimiter.join([ret_query, add_str])
+
+    if opts.season:
+        add_str = SEASON_OPTIONS_SQL.format(opts.season)
+        ret_query = delimiter.join([ret_query, add_str])
+
+    if opts.home_away:
+        if opts.home_away == "home":
+            ret_query = delimiter.join([ret_query, HOME_OPTIONS_SQL])
+        elif opts.home_away == "away":
+            ret_query = delimiter.join(([ret_query, AWAY_OPTIONS_SQL]))
+
+    # limit
+    # ret_query = delimiter.join([ret_query, LIMIT_OPTIONS_SQL.format(opts.limit)])
     return ret_query
 
 
@@ -47,6 +73,3 @@ if __name__ == "__main__":
         limit=1000,
         quarter=4,
     )
-
-    # print(opts_var.__str__())
-    # print(build_plays_query(opt=opts_var))

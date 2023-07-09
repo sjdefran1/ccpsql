@@ -13,7 +13,7 @@ from activeIDS import IDS
 
 CSV_FILE_NAMES = {
     "players": "Players.csv",
-    "matchups": "MatchupsV4.csv",
+    "matchups": "MatchupsV6.csv",
     "matchup_stats": "MatchupStats.csv",
     "teams": "Teams.csv",
     "plays": "PlaysV3.csv",
@@ -81,8 +81,8 @@ def create_plays_dataframe():
 if __name__ == "__main__":
     # create_players_dataframe()
     # create_matchup_and_stats_dataframes()
-    # create_matchupV2()
+    create_matchupV2()
     # create_teams_dataframe()
-    create_plays_dataframe()
+    # create_plays_dataframe()
     # d = parse_all_players_txt()
     # print(d)

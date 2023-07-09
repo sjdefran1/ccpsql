@@ -1,27 +1,73 @@
 import os
+import uuid
+from json import loads
+
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 import psycopg2
-import sqlalchemy as sa
 import pandas as pd
 from dotenv import load_dotenv
 
 load_dotenv()
-from time import perf_counter
-
 
 from querybuilder.playsQueryBuilder import build_plays_query
+from querybuilder.playSql import PLAYS_QUERY_COLUMNS_NAMES, CREATE_VIEW, DROP_VIEW
 from postgresload.table_schemas import *
 from RequestModels import PlayOptions
 
 app = FastAPI()
 
 
-@app.on_event("startup")
-async def startup():
-    print("\tCONNECTING TO DATABASE")
+def generate_unique_view_name():
+    """Creates unique temp view name for query"""
+    # temp_table_539c35fb19024e7880738152f7743f89
+    # removes - per postgres standars
+    return ("temp_table_" + str(uuid.uuid4()).replace("-", "")).lower()
+
+
+def plays_query_executor(query: str) -> dict:
+    """
+    Creates view using provided query
+
+    Selects all results as well as len and stores them in a dict
+
+    Drops view,
+
+    ### returns
+    dict `{'results': rowset: list, 'len': len of rowset: int}`
+    """
+    ping_db()
+    results_dict = {}
+    view_name = generate_unique_view_name()
+    add_str = CREATE_VIEW.format(view_name)
+    query = "".join([add_str, query])
+
+    # Create view
+    print(f"CREATING VIEW\n{query}")
+    psy_cursor.execute(query)
+
+    # Get length
+    # [0][0] gets int value of len instead of row arr
+    psy_cursor.execute(f"select count(*) from {view_name}")
+    results_dict["len"] = psy_cursor.fetchall()[0][0]
+
+    # Select all plays store as results
+    psy_cursor.execute(
+        f"select * from {view_name} order by row_number desc limit 1000;"
+    )
+    results_dict["results"] = psy_cursor.fetchall()
+
+    # drop view
+    print(f"Dropping VIEW\n{DROP_VIEW.format(view_name)}")
+    psy_cursor.execute(DROP_VIEW.format(view_name))
+    return results_dict
+
+
+def create_connections():
+    """Makes connection w/ postgres db, declares psy_cursor and psyconn globally"""
     global psy_cursor
-    # sa_engine = sa.create_engine(PG_URL)
+    global psyconn
+    print("\tCONNECTING TO DATABASE")
     psyconn = psycopg2.connect(
         host=os.getenv("NEONHOST"),
         port=os.getenv("NEONPORT"),
@@ -33,12 +79,22 @@ async def startup():
     print("\tFINISHED")
 
 
+def ping_db():
+    """Checks if connection to db has closed, resets connection if it has"""
+    try:
+        psy_cursor.execute("SELECT 1")
+    except psycopg2.OperationalError:
+        print("Connection was closed")
+        create_connections()  # reset connection
+
+
+@app.on_event("startup")
+async def startup():
+    create_connections()
+
+
 @app.get("/teams")
 async def get_all_teams_controller():
-    """
-    Returns teams table from mongodb
-    Common information for each team, name, city, teamid
-    """
     psy_cursor.execute("SELECT * FROM teams")
     ret_list = []
     for res in psy_cursor.fetchall():
@@ -47,20 +103,23 @@ async def get_all_teams_controller():
     return JSONResponse(content=ret_list)
 
 
-@app.get("/query")
-async def query_builder_test(opts: PlayOptions):
+@app.get("/plays")
+async def get_players_plays(opts: PlayOptions):
     query = build_plays_query(opts=opts)
-    psy_cursor.execute(query)
-    print("Query Returned")
-    rows = psy_cursor.fetchall()
-    return JSONResponse(content=rows, status_code=200)
+    result_dict = plays_query_executor(query=query)
+    df = pd.DataFrame(data=result_dict["results"], columns=PLAYS_QUERY_COLUMNS_NAMES)
+    return_dict = {
+        "len": result_dict["len"],
+        "results": loads(df.to_json(orient="records")),
+    }
+    return JSONResponse(content=return_dict, status_code=200)
 
 
 @app.on_event("shutdown")
 async def shutdown():
     print("\tCLOSING CURSOR")
-    # sa_cursor.close()
     psy_cursor.close()
+    psyconn.close()
     print("\tCLOSED")
 
 
